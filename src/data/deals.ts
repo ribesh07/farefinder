@@ -1,0 +1,8 @@
+export const deals = [
+  { id: 1, title: 'Last Minute Escape to Spain', type: 'last-minute', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=spain%20beach%20sunshine%20vacation%20photography&image_size=square_hd', price: 199, originalPrice: 349, savings: 150, expires: '3 days' },
+  { id: 2, title: 'Student Discount - 15% Off All Flights', type: 'student', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=student%20travel%20backpack%20airport%20photography&image_size=square_hd', price: null, originalPrice: null, savings: null, expires: '30 days' },
+  { id: 3, title: 'Family Package - Kids Fly Free', type: 'family', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=family%20airplane%20travel%20happy%20photography&image_size=square_hd', price: 599, originalPrice: 899, savings: 300, expires: '2 weeks' },
+  { id: 4, title: 'Business Class Upgrade - 50% Off', type: 'business', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=business%20class%20airplane%20seat%20luxury%20photography&image_size=square_hd', price: 799, originalPrice: 1599, savings: 800, expires: '1 week' },
+  { id: 5, title: 'Winter Sun in Canary Islands', type: 'last-minute', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=canary%20islands%20beach%20winter%20sun%20photography&image_size=square_hd', price: 249, originalPrice: 399, savings: 150, expires: '5 days' },
+  { id: 6, title: 'Student Adventure to Thailand', type: 'student', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=thailand%20backpack%20adventure%20temple%20photography&image_size=square_hd', price: 549, originalPrice: 799, savings: 250, expires: '20 days' },
+];

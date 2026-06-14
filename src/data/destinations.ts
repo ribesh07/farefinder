@@ -1,0 +1,14 @@
+export const destinations = [
+  { id: 1, name: 'London', country: 'UK', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=london%20skyline%20big%20ben%20modern%20photography&image_size=square_hd', description: 'The vibrant capital city of the UK', price: 89 },
+  { id: 2, name: 'Manchester', country: 'UK', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=manchester%20city%20skyline%20modern%20photography&image_size=square_hd', description: 'The northern powerhouse city', price: 65 },
+  { id: 3, name: 'Edinburgh', country: 'UK', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=edinburgh%20castle%20scotland%20photography&image_size=square_hd', description: 'Scotland\'s stunning capital', price: 75 },
+  { id: 4, name: 'Paris', country: 'France', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=eiffel%20tower%20paris%20france%20photography&image_size=square_hd', description: 'The City of Light', price: 99 },
+  { id: 5, name: 'Amsterdam', country: 'Netherlands', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=amsterdam%20canals%20netherlands%20photography&image_size=square_hd', description: 'The city of canals and windmills', price: 110 },
+  { id: 6, name: 'Dubai', country: 'UAE', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=dubai%20skyline%20burj%20khalifa%20photography&image_size=square_hd', description: 'Luxury in the desert', price: 420 },
+  { id: 7, name: 'New York', country: 'USA', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=new%20york%20city%20skyline%20manhattan%20photography&image_size=square_hd', description: 'The city that never sleeps', price: 520 },
+  { id: 8, name: 'Bangkok', country: 'Thailand', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=bangkok%20temples%20thailand%20photography&image_size=square_hd', description: 'Temples, street food, and nightlife', price: 480 },
+  { id: 9, name: 'Barcelona', country: 'Spain', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=barcelona%20sagrada%20familia%20spain%20photography&image_size=square_hd', description: 'Gaudí\'s masterpiece', price: 140 },
+  { id: 10, name: 'Rome', country: 'Italy', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=rome%20colosseum%20italy%20photography&image_size=square_hd', description: 'The Eternal City', price: 130 },
+  { id: 11, name: 'Malé', country: 'Maldives', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=maldives%20beach%20resort%20paradise%20photography&image_size=square_hd', description: 'Tropical paradise', price: 620 },
+  { id: 12, name: 'Istanbul', country: 'Turkey', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=istanbul%20hagia%20sophia%20turkey%20photography&image_size=square_hd', description: 'Where East meets West', price: 180 },
+];
