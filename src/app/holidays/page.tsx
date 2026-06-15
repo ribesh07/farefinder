@@ -1,8 +1,21 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import PackageCard from '@/components/package-card';
 import Newsletter from '@/components/newsletter';
-import { packages } from '@/data/packages';
 
 export default function HolidaysPage() {
+  const [packages, setPackages] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchPackages() {
+      const res = await fetch('/api/packages');
+      const data = await res.json();
+      setPackages(data);
+    }
+    fetchPackages();
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Hero */}

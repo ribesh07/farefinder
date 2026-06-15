@@ -1,8 +1,21 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import DestinationCard from '@/components/destination-card';
 import Newsletter from '@/components/newsletter';
-import { destinations } from '@/data/destinations';
 
 export default function DestinationsPage() {
+  const [destinations, setDestinations] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchDestinations() {
+      const res = await fetch('/api/destinations');
+      const data = await res.json();
+      setDestinations(data);
+    }
+    fetchDestinations();
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Hero */}

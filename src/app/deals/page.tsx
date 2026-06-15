@@ -1,14 +1,27 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import DealCard from '@/components/deal-card';
 import Newsletter from '@/components/newsletter';
-import { deals } from '@/data/deals';
 
 export default function DealsPage() {
+  const [deals, setDeals] = useState<any[]>([]);
+
   const dealTypes = [
-    { key: 'last-minute', label: 'Last Minute Deals' },
-    { key: 'student', label: 'Student Deals' },
-    { key: 'family', label: 'Family Deals' },
-    { key: 'business', label: 'Business Class Offers' },
+    { key: 'LAST_MINUTE', label: 'Last Minute Deals' },
+    { key: 'STUDENT', label: 'Student Deals' },
+    { key: 'FAMILY', label: 'Family Deals' },
+    { key: 'BUSINESS', label: 'Business Class Offers' },
   ];
+
+  useEffect(() => {
+    async function fetchDeals() {
+      const res = await fetch('/api/deals');
+      const data = await res.json();
+      setDeals(data);
+    }
+    fetchDeals();
+  }, []);
 
   return (
     <div className="min-h-screen">

@@ -7,10 +7,10 @@ interface DestinationCardProps {
   name: string;
   country: string;
   description: string;
-  price: number;
+  startingFare: number;
 }
 
-export default function DestinationCard({ image, name, country, description, price }: DestinationCardProps) {
+export default function DestinationCard({ image, name, country, description, startingFare }: DestinationCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
       <div className="relative h-48 overflow-hidden">
@@ -30,7 +30,7 @@ export default function DestinationCard({ image, name, country, description, pri
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500">From</p>
-            <p className="text-2xl font-bold text-primary">£{price}</p>
+            <p className="text-2xl font-bold text-primary">£{startingFare}</p>
           </div>
         </div>
       </CardContent>

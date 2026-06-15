@@ -1,24 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FlightCard from '@/components/flight-card';
-import { flights } from '@/data/flights';
-import { airlines } from '@/data/airlines';
+import { prisma } from '@/lib/prisma';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Filter } from 'lucide-react';
 
+interface Flight {
+  id: string;
+  airline: string;
+  flightNumber: string;
+  fromAirport: string;
+  toAirport: string;
+  departureTime: Date;
+  arrivalTime: Date;
+  duration: string;
+  stops: number;
+  farePrice: number;
+}
+
 export default function FlightsPage() {
+  const [flights, setFlights] = useState<Flight[]>([]);
   const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [stops, setStops] = useState<string[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
+  useEffect(() => {
+    async function fetchFlights() {
+      const response = await fetch('/api/flights');
+      const data = await response.json();
+      setFlights(data);
+    }
+    fetchFlights();
+  }, []);
+
+  const airlines = Array.from(new Set(flights.map(f => f.airline)));
+
   const filteredFlights = flights.filter(flight => {
     const airlineMatch = selectedAirlines.length === 0 || selectedAirlines.includes(flight.airline);
-    const priceMatch = flight.price >= priceRange[0] && flight.price <= priceRange[1];
+    const priceMatch = flight.farePrice >= priceRange[0] && flight.farePrice <= priceRange[1];
     const stopsMatch = stops.length === 0 || 
       (stops.includes('0') && flight.stops === 0) ||
       (stops.includes('1') && flight.stops === 1) ||
@@ -66,13 +90,13 @@ export default function FlightsPage() {
                 <h4 className="font-medium mb-3">Airlines</h4>
                 <div className="space-y-2">
                   {airlines.map(airline => (
-                    <div key={airline.name} className="flex items-center space-x-2">
+                    <div key={airline} className="flex items-center space-x-2">
                       <Checkbox
-                        id={`airline-${airline.name}`}
-                        checked={selectedAirlines.includes(airline.name)}
-                        onCheckedChange={() => toggleAirline(airline.name)}
+                        id={`airline-${airline}`}
+                        checked={selectedAirlines.includes(airline)}
+                        onCheckedChange={() => toggleAirline(airline)}
                       />
-                      <Label htmlFor={`airline-${airline.name}`}>{airline.name}</Label>
+                      <Label htmlFor={`airline-${airline}`}>{airline}</Label>
                     </div>
                   ))}
                 </div>

@@ -4,21 +4,22 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, User } from 'lucide-react';
 
 interface BlogCardProps {
-  image: string;
+  featuredImage: string;
   title: string;
   author: string;
-  date: string;
+  createdAt: Date;
   category: string;
   excerpt: string;
+  slug: string;
 }
 
-export default function BlogCard({ image, title, author, date, category, excerpt }: BlogCardProps) {
+export default function BlogCard({ featuredImage, title, author, createdAt, category, excerpt, slug }: BlogCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group h-full">
-      <Link href="/blog" className="block">
+      <Link href={`/blog`} className="block">
         <div className="relative h-48 overflow-hidden">
           <img
-            src={image}
+            src={featuredImage}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -35,7 +36,7 @@ export default function BlogCard({ image, title, author, date, category, excerpt
           </div>
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4" />
-            <span>{new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+            <span>{new Date(createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
           </div>
         </CardFooter>
       </Link>

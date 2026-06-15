@@ -1,32 +1,45 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { airlines } from '@/data/airlines';
 
 interface FlightCardProps {
+  id: string;
   airline: string;
   flightNumber: string;
-  from: string;
-  to: string;
-  departure: string;
-  arrival: string;
+  fromAirport: string;
+  toAirport: string;
+  departureTime: Date;
+  arrivalTime: Date;
   duration: string;
-  price: number;
   stops: number;
+  farePrice: number;
 }
 
-export default function FlightCard({ airline, flightNumber, from, to, departure, arrival, duration, price, stops }: FlightCardProps) {
-  const airlineData = airlines.find(a => a.name === airline);
+export default function FlightCard({
+  airline,
+  flightNumber,
+  fromAirport,
+  toAirport,
+  departureTime,
+  arrivalTime,
+  duration,
+  stops,
+  farePrice,
+}: FlightCardProps) {
+  const formatTime = (date: Date) => {
+    return new Date(date).toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
-            <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
-              {airlineData?.logo && (
-                <img src={airlineData.logo} alt={airline} className="w-full h-full object-cover" />
-              )}
+            <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+              <p className="text-lg font-bold text-primary">{airline.charAt(0)}</p>
             </div>
             <div>
               <p className="font-semibold">{airline}</p>
@@ -36,8 +49,8 @@ export default function FlightCard({ airline, flightNumber, from, to, departure,
 
           <div className="flex items-center justify-between flex-1 max-w-lg">
             <div className="text-center">
-              <p className="text-2xl font-bold">{departure}</p>
-              <p className="text-sm text-gray-500">{from}</p>
+              <p className="text-2xl font-bold">{formatTime(departureTime)}</p>
+              <p className="text-sm text-gray-500">{fromAirport}</p>
             </div>
             <div className="flex-1 mx-4">
               <div className="flex items-center">
@@ -52,13 +65,13 @@ export default function FlightCard({ airline, flightNumber, from, to, departure,
               </div>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">{arrival}</p>
-              <p className="text-sm text-gray-500">{to}</p>
+              <p className="text-2xl font-bold">{formatTime(arrivalTime)}</p>
+              <p className="text-sm text-gray-500">{toAirport}</p>
             </div>
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-3xl font-bold text-primary">£{price}</p>
+            <p className="text-3xl font-bold text-primary">£{farePrice}</p>
             <p className="text-sm text-gray-500">per person</p>
           </div>
         </div>

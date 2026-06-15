@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Flight {
+  id            String              @id @default(uuid())
+  airline       String
+  flightNumber  String
+  fromAirport   String
+  toAirport     String
+  departureTime DateTime
+  arrivalTime   DateTime
+  duration      String
+  stops         Int                 @default(0)
+  cabinClass    String              @default("Economy")
+  baggageInfo   String?
+  farePrice     Float
+  oldPrice      Float?
+  featured      Boolean             @default(false)
+  active        Boolean             @default(true)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  leads         FlightBookingLead[]
+}
+
+model FlightBookingLead {
+  id            String     @id @default(uuid())
+  flightId      String
+  fullName      String
+  email         String
+  phone         String
+  whatsapp      String?
+  adults        Int
+  children      Int        @default(0)
+  departureDate DateTime
+  returnDate    DateTime?
+  notes         String?
+  status        LeadStatus @default(NEW)
+  internalNotes String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  flight        Flight     @relation(fields: [flightId], references: [id], onDelete: Cascade)
+}
+
+model HolidayPackage {
+  id            String        @id @default(uuid())
+  title         String
+  destination   String
+  image         String
+  description   String
+  duration      String
+  hotelRating   Int
+  startingPrice Float
+  featured      Boolean       @default(false)
+  active        Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  leads         PackageLead[]
+}
+
+model PackageLead {
+  id             String         @id @default(uuid())
+  packageId      String
+  fullName       String
+  email          String
+  phone          String
+  whatsapp       String?
+  travelers      Int
+  notes          String?
+  status         LeadStatus     @default(NEW)
+  internalNotes  String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  holidayPackage HolidayPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+}
+
+model Destination {
+  id           String   @id @default(uuid())
+  name         String
+  slug         String   @unique
+  country      String
+  image        String
+  description  String
+  startingFare Float
+  featured     Boolean  @default(false)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BlogPost {
+  id             String   @id @default(uuid())
+  title          String
+  slug           String   @unique
+  excerpt        String
+  content        String
+  featuredImage  String
+  category       String
+  author         String
+  published      Boolean  @default(false)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  location  String?
+  image     String?
+  rating    Int
+  review    String
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Deal {
+  id          String   @id @default(uuid())
+  title       String
+  type        DealType
+  description String?
+  image       String
+  oldPrice    Float?
+  newPrice    Float
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NewsletterSubscriber {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  subscribedAt DateTime @default(now())
+}
+
+model ContactInquiry {
+  id        String        @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  status    InquiryStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model WebsiteSettings {
+  id             String   @id @default(uuid())
+  companyName    String   @default("FareFinderUK")
+  supportEmail   String   @default("support@farefinderuk.com")
+  supportPhone   String   @default("+44 20 7123 4567")
+  whatsappNumber String   @default("+9779862551025")
+  facebook       String?
+  instagram      String?
+  twitter        String?
+  linkedin       String?
+  officeAddress  String   @default("123 Travel Street, London, UK")
+  smtpHost       String?
+  smtpPort       Int?
+  smtpUser       String?
+  smtpPassword   String?
+  updatedAt      DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CONTENT_MANAGER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  BOOKED
+  CANCELLED
+}
+
+enum DealType {
+  LAST_MINUTE
+  STUDENT
+  FAMILY
+  BUSINESS
+}
+
+enum InquiryStatus {
+  NEW
+  REPLIED
+  CLOSED
+}
