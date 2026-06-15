@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import InquiryList from "./InquiryList"
 
+export const dynamic = "force-dynamic"
+
 export default async function InquiriesPage() {
   const inquiries = await prisma.contactInquiry.findMany({
     orderBy: { createdAt: "desc" },

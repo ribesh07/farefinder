@@ -21,6 +21,7 @@ import { createFlight } from "@/actions"
 export default function NewFlightPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { register, handleSubmit, setValue, watch } = useForm()
 
   const watchedFeatured = watch("featured", false)
@@ -28,16 +29,26 @@ export default function NewFlightPage() {
 
   async function onSubmit(data: any) {
     setIsLoading(true)
-    const result = await createFlight({
-      ...data,
-      featured: data.featured || false,
-      active: data.active !== undefined ? data.active : true,
-      stops: Number(data.stops),
-      farePrice: Number(data.farePrice),
-      oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
-    })
-    if (result.success) {
-      router.push("/admin/flights")
+    setError(null)
+    console.log("Submitting flight data:", data)
+    try {
+      const result = await createFlight({
+        ...data,
+        featured: data.featured || false,
+        active: data.active !== undefined ? data.active : true,
+        stops: Number(data.stops),
+        farePrice: Number(data.farePrice),
+        oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
+      })
+      console.log("Create flight result:", result)
+      if (result.success) {
+        router.push("/admin/flights")
+      } else {
+        setError(result.error || "Something went wrong")
+      }
+    } catch (err) {
+      console.error("Error creating flight:", err)
+      setError("An unexpected error occurred")
     }
     setIsLoading(false)
   }
@@ -45,6 +56,11 @@ export default function NewFlightPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Add New Flight</h1>
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
       <Card>
         <CardHeader>
           <CardTitle>Flight Details</CardTitle>

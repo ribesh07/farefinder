@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { deleteHolidayPackage } from "@/actions"
 import { Plus, Edit, Trash2 } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function PackagesPage() {
   const packages = await prisma.holidayPackage.findMany({
     orderBy: { createdAt: "desc" },

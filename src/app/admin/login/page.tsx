@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useFormState } from "react-dom"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,16 +10,13 @@ import { login } from "@/actions"
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const [error, setError] = useState("")
+  const [state, formAction] = useFormState(login, { success: true, error: "" })
 
-  async function onSubmit(data: any) {
+  function onSubmit(data: any) {
     const formData = new FormData()
     formData.append("email", data.email)
     formData.append("password", data.password)
-    const result = await login(formData)
-    if (result?.success === false) {
-      setError(result.error)
-    }
+    formAction(formData)
   }
 
   return (
@@ -52,8 +49,8 @@ export default function LoginPage() {
                 <p className="text-red-500 text-sm">{String(errors.password.message)}</p>
               )}
             </div>
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
+            {!state.success && state.error && (
+              <p className="text-red-500 text-sm text-center">{state.error}</p>
             )}
             <Button type="submit" className="w-full">Login</Button>
           </form>

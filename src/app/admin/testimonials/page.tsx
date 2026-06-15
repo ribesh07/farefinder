@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { deleteTestimonial } from "@/actions"
 import { Plus, Edit, Trash2, Star } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function TestimonialsPage() {
   const testimonials = await prisma.testimonial.findMany({
     orderBy: { createdAt: "desc" },

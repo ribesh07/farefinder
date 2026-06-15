@@ -10,6 +10,8 @@ import { CheckCircle, Users, Award, Globe } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import HomeClient from './home-client';
 
+export const dynamic = "force-dynamic";
+
 async function getHomeData() {
   const destinations = await prisma.destination.findMany({
     where: { active: true, featured: true },

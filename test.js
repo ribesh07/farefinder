@@ -1,12 +1,12 @@
-// test.ts
+// // test.ts
 
-import { PrismaClient } from '@prisma/client'
+// import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
-async function main() {
-  const count = await prisma.destination.count()
-  console.log(count)
-}
+// async function main() {
+//   const count = await prisma.destination.count()
+//   console.log(count)
+// }
 
-main()
+// main()

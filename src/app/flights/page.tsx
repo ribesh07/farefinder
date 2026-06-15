@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import FlightCard from '@/components/flight-card';
-import { prisma } from '@/lib/prisma';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';

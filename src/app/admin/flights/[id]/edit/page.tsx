@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import EditFlightForm from "./EditFlightForm"
 
+export const dynamic = "force-dynamic"
+
 interface EditFlightPageProps {
   params: { id: string }
 }

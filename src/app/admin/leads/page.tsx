@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import LeadsList from "./LeadsList"
 
+export const dynamic = "force-dynamic"
+
 export default async function LeadsPage() {
   const flightLeads = await prisma.flightBookingLead.findMany({
     include: { flight: true },

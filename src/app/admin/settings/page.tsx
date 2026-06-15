@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import SettingsForm from "./SettingsForm"
 
+export const dynamic = "force-dynamic"
+
 interface Settings {
   id: string
   companyName: string

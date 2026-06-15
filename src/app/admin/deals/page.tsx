@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { deleteDeal } from "@/actions"
 import { Plus, Edit, Trash2 } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function DealsPage() {
   const deals = await prisma.deal.findMany({
     orderBy: { createdAt: "desc" },

@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import EditTestimonialForm from "./EditTestimonialForm"
 
+export const dynamic = "force-dynamic"
+
 interface EditTestimonialPageProps {
   params: { id: string }
 }

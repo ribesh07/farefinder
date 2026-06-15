@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { deleteBlogPost } from "@/actions"
 import { Plus, Edit, Trash2 } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
     orderBy: { createdAt: "desc" },

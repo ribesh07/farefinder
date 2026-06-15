@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import EditBlogForm from "./EditBlogForm"
 
+export const dynamic = "force-dynamic"
+
 interface EditBlogPageProps {
   params: { id: string }
 }

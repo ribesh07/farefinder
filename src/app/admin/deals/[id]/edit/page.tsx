@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import EditDealForm from "./EditDealForm"
 
+export const dynamic = "force-dynamic"
+
 interface EditDealPageProps {
   params: { id: string }
 }

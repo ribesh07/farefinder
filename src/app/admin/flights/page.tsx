@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { deleteFlight } from "@/actions"
 import { Plus, Edit, Trash2 } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function FlightsPage() {
   const flights = await prisma.flight.findMany({
     orderBy: { createdAt: "desc" },

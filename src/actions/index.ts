@@ -24,55 +24,82 @@ import {
   newsletterSchema,
 } from "@/types"
 
-export async function login(formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
+  console.log("Login action called")
   const validated = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   })
 
   if (!validated.success) {
+    console.log("Validation failed:", validated.error)
     return { success: false, error: "Invalid credentials" }
   }
 
   const { email, password } = validated.data
+  console.log("Attempting login for email:", email)
 
   const user = await prisma.adminUser.findUnique({ where: { email } })
-  console.log(user)
+  console.log("Found user:", user)
   if (!user) {
     return { success: false, error: "Invalid credentials" }
   }
 
   const isValid = await verifyPassword(password, user.passwordHash)
+  console.log("Password valid:", isValid)
   if (!isValid) {
     return { success: false, error: "Invalid credentials" }
   }
-  console.log(user)
-  const token = createToken(user.id, user.role)
-  setAuthCookie(token)
+  
+  const token = await createToken(user.id, user.role)
+  console.log("Created token:", token)
+  
+  // Set cookie directly
+  const cookieStore = require("next/headers").cookies()
+  cookieStore.set("auth-token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7,
+    path: "/",
+  })
+  console.log("Cookie set, redirecting to /admin")
+  
+  // Use redirect - this will throw an error that Next.js catches
   redirect("/admin")
 }
 
 export async function logout() {
-  removeAuthCookie()
+  const cookieStore = require("next/headers").cookies()
+  cookieStore.delete("auth-token")
   redirect("/admin/login")
 }
 
 // Flight actions
 export async function createFlight(data: unknown) {
+  console.log("createFlight called with data:", data)
   const validated = flightSchema.safeParse(data)
   if (!validated.success) {
-    return { success: false, error: "Invalid data" }
+    console.error("Validation errors:", validated.error)
+    return { success: false, error: "Invalid data: " + JSON.stringify(validated.error.issues) }
   }
   const { departureTime, arrivalTime, ...rest } = validated.data
-  await prisma.flight.create({
-    data: {
-      ...rest,
-      departureTime: new Date(departureTime),
-      arrivalTime: new Date(arrivalTime),
-    },
-  })
-  revalidatePath("/admin/flights")
-  return { success: true }
+  console.log("Creating flight with:", { ...rest, departureTime, arrivalTime })
+  try {
+    const flight = await prisma.flight.create({
+      data: {
+        ...rest,
+        departureTime: new Date(departureTime),
+        arrivalTime: new Date(arrivalTime),
+      },
+    })
+    console.log("Flight created successfully:", flight)
+    revalidatePath("/admin/flights")
+    return { success: true }
+  } catch (err) {
+    console.error("Error creating flight in Prisma:", err)
+    return { success: false, error: "Failed to create flight" }
+  }
 }
 
 export async function updateFlight(id: string, data: unknown) {

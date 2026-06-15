@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import EditPackageForm from "./EditPackageForm"
 
+export const dynamic = "force-dynamic"
+
 interface EditPackagePageProps {
   params: { id: string }
 }
