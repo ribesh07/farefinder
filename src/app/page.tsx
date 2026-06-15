@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Plane } from "lucide-react";
 import { motion } from 'framer-motion';
 import HeroSearch from '@/components/hero-search';
 import DestinationCard from '@/components/destination-card';
@@ -14,6 +15,7 @@ import { testimonials } from '@/data/testimonials';
 import { blogs } from '@/data/blogs';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Users, Award, Globe } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   const features = [
@@ -27,15 +29,17 @@ export default function Home() {
     <div>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-blue-700 to-blue-900 text-white py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-70">
           <img
-            src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=london%20skyline%20airplane%20flying%20travel%20photography&image_size=landscape_16_9"
+            src="cover.png"
+            
             alt="Travel Background"
             className="w-full h-full object-cover"
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
+        
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -44,6 +48,20 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Find Your Perfect Flight</h1>
             <p className="text-xl md:text-2xl opacity-90">Discover amazing deals on flights, holidays, and more</p>
           </motion.div>
+          <motion.div
+              className="absolute top-24 -left-40 flex items-center"
+              animate={{ x: ["0vw", "130vw"] }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                repeatDelay: 5,
+                ease: "linear",
+              }}
+            >
+              <div className="w-32 h-[2px] bg-white/30" />
+              <img src="/plane.png" alt="Plane" className="h-16 w-16 text-white/70" />
+            </motion.div>
+            
           <HeroSearch />
         </div>
       </section>

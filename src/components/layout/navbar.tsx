@@ -88,7 +88,9 @@ export default function Navbar() {
                 {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
               <Button variant="ghost" size="icon">
-                <PoundSterling className="h-5 w-5" />
+                {/* <PoundSterling className="h-5 w-5" />
+                 */}
+                     <span className="text-base">🇬🇧</span>
               </Button>
             </div>
           </div>
