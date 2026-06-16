@@ -31,7 +31,7 @@ const navItems = [
   { label: "Testimonials", href: "/admin/testimonials", icon: <Star className="w-5 h-5" /> },
   { label: "Deals", href: "/admin/deals", icon: <Tag className="w-5 h-5" /> },
   { label: "Inquiries", href: "/admin/inquiries", icon: <Mail className="w-5 h-5" /> },
-  { label: "Settings", href: "/admin/settings", icon: <Settings className="w-5 h-5" /> },
+  // { label: "Settings", href: "/admin/settings", icon: <Settings className="w-5 h-5" /> },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

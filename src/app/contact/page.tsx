@@ -26,9 +26,9 @@ export default function ContactPage() {
   };
 
   const contactInfo = [
-    { icon: <Phone className="h-6 w-6 text-primary" />, title: 'Phone', details: '020 7123 4567' },
-    { icon: <Mail className="h-6 w-6 text-primary" />, title: 'Email', details: 'info@farefinderuk.com' },
-    { icon: <MapPin className="h-6 w-6 text-primary" />, title: 'Address', details: '123 Travel Street, London, UK' },
+    { icon: <Phone className="h-6 w-6 text-primary" />, title: 'Phone', details: '+44 7599 064917' },
+    { icon: <Mail className="h-6 w-6 text-primary" />, title: 'Email', details: 'customerservice@farefinderuk.co.uk' },
+    { icon: <MapPin className="h-6 w-6 text-primary" />, title: 'Address', details: 'Glasgow, UK' },
     { icon: <Clock className="h-6 w-6 text-primary" />, title: 'Hours', details: 'Mon - Sun: 24 Hours' },
   ];
 

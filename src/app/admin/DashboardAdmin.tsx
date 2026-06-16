@@ -42,12 +42,12 @@ export default function DashboardAdmin() {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to FareFinderUK Admin</h1>
               <p className="text-xl opacity-90">Manage your travel business from one place</p>
             </div>
-            <Link href="/admin/settings">
+            {/* <Link href="/admin/settings">
               <Button className="bg-white text-primary hover:bg-gray-100">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
