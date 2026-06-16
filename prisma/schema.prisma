@@ -23,11 +23,11 @@ model Flight {
   airline       String
   logo          String?
   flightNumber  String
-  fromAirport   String
-  toAirport     String
+  fromAirport   String?
+  toAirport     String?
   departureTime DateTime?
   arrivalTime   DateTime?
-  duration      String
+  duration      String?
   stops         Int                 @default(0)
   cabinClass    String              @default("Economy")
   baggageInfo   String?
@@ -91,18 +91,51 @@ model PackageLead {
   holidayPackage HolidayPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
+model DestinationLead {
+  id          String      @id @default(uuid())
+  destinationId String
+  fullName    String
+  email       String
+  phone       String
+  whatsapp    String?
+  travelers   Int
+  notes       String?
+  status      LeadStatus  @default(NEW)
+  internalNotes String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
+model DealLead {
+  id          String      @id @default(uuid())
+  dealId      String
+  fullName    String
+  email       String
+  phone       String
+  whatsapp    String?
+  travelers   Int
+  notes       String?
+  status      LeadStatus  @default(NEW)
+  internalNotes String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deal        Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
+}
+
 model Destination {
-  id           String   @id @default(uuid())
+  id           String            @id @default(uuid())
   name         String
-  slug         String   @unique
+  slug         String            @unique
   country      String
   image        String
   description  String
   startingFare Float
-  featured     Boolean  @default(false)
-  active       Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  featured     Boolean           @default(false)
+  active       Boolean           @default(true)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  leads        DestinationLead[]
 }
 
 model BlogPost {
@@ -143,6 +176,7 @@ model Deal {
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  leads       DealLead[]
 }
 
 model NewsletterSubscriber {

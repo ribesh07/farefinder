@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Flight" ALTER COLUMN "fromAirport" DROP NOT NULL,
+ALTER COLUMN "toAirport" DROP NOT NULL,
+ALTER COLUMN "duration" DROP NOT NULL;

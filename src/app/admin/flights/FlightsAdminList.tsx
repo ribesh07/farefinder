@@ -69,7 +69,13 @@ export default function FlightsAdminList() {
             <Card key={flight.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <img src={flight.logo} alt={`${flight.airline} logo`} className="h-8 w-8 rounded-full" />
+                  {/* <div className="h-12 w-12 flex items-center justify-center rounded-full bg-gray-100"> */}
+                    <img
+                      src={flight.logo}
+                      alt={`${flight.airline} logo`}
+                      className="h-8 w-8 object-contain"
+                    />
+                  {/* </div> */}
                   <CardTitle className="text-lg">
                     {flight.airline} {flight.flightNumber}
                   </CardTitle>

@@ -59,15 +59,16 @@ export default function Footer() {
             <ul className="space-y-3 mb-4">
               <li className="flex items-center space-x-2 text-gray-400">
                 <MapPin className="h-4 w-4" />
-                <span>123 Travel Street, London, UK</span>
+                <span>Glassgow, UK</span>
               </li>
               <li className="flex items-center space-x-2 text-gray-400">
                 <Phone className="h-4 w-4" />
-                <span>020 7123 4567</span>
+                <span>44 7599 064917</span>
               </li>
               <li className="flex items-center space-x-2 text-gray-400">
                 <Mail className="h-4 w-4" />
-                <span>info@farefinderuk.uk.co</span>
+                <span>customerservice@farefinderuk.co.uk</span>
+                
               </li>
             </ul>
             <div>

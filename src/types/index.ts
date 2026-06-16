@@ -101,6 +101,26 @@ export const packageLeadSchema = z.object({
   notes: z.string().optional(),
 })
 
+export const destinationLeadSchema = z.object({
+  destinationId: z.string(),
+  fullName: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  whatsapp: z.string().optional(),
+  travelers: z.number().int().min(1),
+  notes: z.string().optional(),
+})
+
+export const dealLeadSchema = z.object({
+  dealId: z.string(),
+  fullName: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  whatsapp: z.string().optional(),
+  travelers: z.number().int().min(1),
+  notes: z.string().optional(),
+})
+
 export const contactInquirySchema = z.object({
   name: z.string(),
   email: z.string().email(),

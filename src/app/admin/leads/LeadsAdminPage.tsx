@@ -47,9 +47,37 @@ type PackageLead = {
   holidayPackage?: { title: string };
 };
 
+type DestinationLead = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  whatsapp: string | null;
+  travelers: number;
+  notes: string | null;
+  status: string;
+  internalNotes: string | null;
+  destination?: { name: string };
+};
+
+type DealLead = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  whatsapp: string | null;
+  travelers: number;
+  notes: string | null;
+  status: string;
+  internalNotes: string | null;
+  deal?: { title: string };
+};
+
 export default function LeadsAdminPage() {
   const [flightLeads, setFlightLeads] = useState<FlightLead[]>([]);
   const [packageLeads, setPackageLeads] = useState<PackageLead[]>([]);
+  const [destinationLeads, setDestinationLeads] = useState<DestinationLead[]>([]);
+  const [dealLeads, setDealLeads] = useState<DealLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,11 +87,15 @@ export default function LeadsAdminPage() {
     const result = await adminFetch<{
       flightLeads: FlightLead[];
       packageLeads: PackageLead[];
+      destinationLeads: DestinationLead[];
+      dealLeads: DealLead[];
     }>("/leads");
 
     if (result.ok) {
       setFlightLeads(result.data.flightLeads);
       setPackageLeads(result.data.packageLeads);
+      setDestinationLeads(result.data.destinationLeads);
+      setDealLeads(result.data.dealLeads);
     } else {
       setError(result.error);
     }
@@ -78,7 +110,7 @@ export default function LeadsAdminPage() {
     <div className="space-y-8">
       <AdminPageHeader
         title="Leads"
-        description="Review and manage flight and package booking leads."
+        description="Review and manage flight, package, destination, and deal booking leads."
       />
 
       {error && <AdminAlert type="error" message={error} />}
@@ -130,6 +162,50 @@ export default function LeadsAdminPage() {
               </div>
             )}
           </section>
+
+          <section>
+            <h2 className="mb-4 text-xl font-semibold">Destination Leads</h2>
+            {destinationLeads.length === 0 ? (
+              <Card>
+                <CardContent className="py-8 text-center text-gray-500">
+                  No destination leads yet.
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4">
+                {destinationLeads.map((lead) => (
+                  <LeadCard
+                    key={lead.id}
+                    lead={lead}
+                    type="destination"
+                    onUpdated={loadLeads}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-xl font-semibold">Deal Leads</h2>
+            {dealLeads.length === 0 ? (
+              <Card>
+                <CardContent className="py-8 text-center text-gray-500">
+                  No deal leads yet.
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4">
+                {dealLeads.map((lead) => (
+                  <LeadCard
+                    key={lead.id}
+                    lead={lead}
+                    type="deal"
+                    onUpdated={loadLeads}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
         </>
       )}
     </div>
@@ -141,8 +217,8 @@ function LeadCard({
   type,
   onUpdated,
 }: {
-  lead: FlightLead | PackageLead;
-  type: "flight" | "package";
+  lead: FlightLead | PackageLead | DestinationLead | DealLead;
+  type: "flight" | "package" | "destination" | "deal";
   onUpdated: () => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -152,10 +228,11 @@ function LeadCard({
 
   const handleSave = async () => {
     setIsSaving(true);
-    const endpoint =
-      type === "flight"
-        ? `/leads/flight/${lead.id}`
-        : `/leads/package/${lead.id}`;
+    let endpoint = "";
+    if (type === "flight") endpoint = `/leads/flight/${lead.id}`;
+    else if (type === "package") endpoint = `/leads/package/${lead.id}`;
+    else if (type === "destination") endpoint = `/leads/destination/${lead.id}`;
+    else if (type === "deal") endpoint = `/leads/deal/${lead.id}`;
 
     const result = await adminFetch(endpoint, {
       method: "PATCH",
@@ -170,6 +247,14 @@ function LeadCard({
     } else {
       window.alert(result.error);
     }
+  };
+
+  const getDeleteEndpoint = () => {
+    if (type === "flight") return `/leads/flight/${lead.id}`;
+    if (type === "package") return `/leads/package/${lead.id}`;
+    if (type === "destination") return `/leads/destination/${lead.id}`;
+    if (type === "deal") return `/leads/deal/${lead.id}`;
+    return "";
   };
 
   return (
@@ -188,11 +273,7 @@ function LeadCard({
                   Edit
                 </Button>
                 <DeleteButton
-                  endpoint={
-                    type === "flight"
-                      ? `/leads/flight/${lead.id}`
-                      : `/leads/package/${lead.id}`
-                  }
+                  endpoint={getDeleteEndpoint()}
                   itemName={lead.fullName}
                   onDeleted={onUpdated}
                 />
@@ -252,11 +333,35 @@ function LeadCard({
           </>
         )}
 
-        {type === "package" && "travelers" in lead && (
+        {type === "package" && "travelers" in lead && "holidayPackage" in lead && (
           <>
             <div>
               <span className="text-gray-500">Package:</span>{" "}
               {lead.holidayPackage?.title}
+            </div>
+            <div>
+              <span className="text-gray-500">Travelers:</span> {lead.travelers}
+            </div>
+          </>
+        )}
+
+        {type === "destination" && "travelers" in lead && "destination" in lead && (
+          <>
+            <div>
+              <span className="text-gray-500">Destination:</span>{" "}
+              {lead.destination?.name}
+            </div>
+            <div>
+              <span className="text-gray-500">Travelers:</span> {lead.travelers}
+            </div>
+          </>
+        )}
+
+        {type === "deal" && "travelers" in lead && "deal" in lead && (
+          <>
+            <div>
+              <span className="text-gray-500">Deal:</span>{" "}
+              {lead.deal?.title}
             </div>
             <div>
               <span className="text-gray-500">Travelers:</span> {lead.travelers}

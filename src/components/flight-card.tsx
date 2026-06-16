@@ -49,7 +49,7 @@ export default function FlightCard({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center space-x-4">
               <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                <img src={logo} alt={`${airline} logo`} className="h-full w-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                <img src={logo} alt={`${airline} logo`} className="h-full w-full object-contain" onError={(e) => (e.currentTarget.style.display = 'none')} />
               </div>
               <div>
                 <p className="font-semibold">{airline}</p>

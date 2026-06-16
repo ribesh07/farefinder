@@ -6,7 +6,7 @@ export async function GET() {
   const { error } = await requireAdmin();
   if (error) return error;
 
-  const [flightLeads, packageLeads] = await Promise.all([
+  const [flightLeads, packageLeads, destinationLeads, dealLeads] = await Promise.all([
     prisma.flightBookingLead.findMany({
       include: { flight: true },
       orderBy: { createdAt: "desc" },
@@ -15,7 +15,15 @@ export async function GET() {
       include: { holidayPackage: true },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.destinationLead.findMany({
+      include: { destination: true },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.dealLead.findMany({
+      include: { deal: true },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
 
-  return NextResponse.json({ flightLeads, packageLeads });
+  return NextResponse.json({ flightLeads, packageLeads, destinationLeads, dealLeads });
 }
