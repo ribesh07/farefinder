@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = "9779862551025";
+export const WHATSAPP_NUMBER = "447599064917";
 
 export function sendToWhatsApp(options: {
   title?: string;

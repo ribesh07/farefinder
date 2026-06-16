@@ -22,10 +22,10 @@ async function main() {
     create: {
       id: 'default',
       companyName: 'FareFinderUK',
-      supportEmail: 'support@farefinderuk.com',
-      supportPhone: '+44 20 7123 4567',
-      whatsappNumber: '+9779862551025',
-      officeAddress: '123 Travel Street, London, UK'
+      supportEmail: 'customerservice@farefinderuk.co.uk',
+      supportPhone: '+44 7599 064917',
+      whatsappNumber: '+44 7599 064917',
+      officeAddress: 'Glassgow, UK'
     }
   })
 
@@ -34,8 +34,8 @@ async function main() {
     data: [
       { name: 'London', slug: 'london', country: 'UK', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=london%20skyline%20big%20ben%20modern%20photography&image_size=square_hd', description: 'The vibrant capital city of the UK', startingFare: 89, featured: true, active: true },
       { name: 'Paris', slug: 'paris', country: 'France', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=eiffel%20tower%20paris%20france%20photography&image_size=square_hd', description: 'The City of Light', startingFare: 99, featured: true, active: true },
-      { name: 'Dubai', slug: 'dubai', country: 'UAE', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=dubai%20skyline%20burj%20khalifa%20photography&image_size=square_hd', description: 'Luxury in the desert', startingFare: 420, featured: true, active: true },
-      { name: 'New York', slug: 'new-york', country: 'USA', image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=new%20york%20city%20skyline%20manhattan%20photography&image_size=square_hd', description: 'The city that never sleeps', startingFare: 520, featured: true, active: true }
+      { name: 'Dubai', slug: 'dubai', country: 'UAE', image: 'https://thumbs.dreamstime.com/b/dubai-marina-beauty-view-rooftop-showing-cityscape-boats-sea-view-51444879.jpg', description: 'Luxury in the desert', startingFare: 420, featured: true, active: true },
+      { name: 'New York', slug: 'new-york', country: 'USA', image: 'https://media.istockphoto.com/id/521714583/photo/new-york-city-midtown-with-empire-state-building-at-sunset.jpg?s=612x612&w=0&k=20&c=paLoZfZnaZSfaBK_DxLls_Ii0hD3r2PBKSlS6M1QxVU=', description: 'The city that never sleeps', startingFare: 520, featured: true, active: true }
     ],
     skipDuplicates: true
   })
