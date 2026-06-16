@@ -1,47 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { createDeal } from "@/actions"
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AdminAlert } from "@/components/admin/AdminAlert";
+import { ImageUrlField } from "@/components/admin/ImageUrlField";
+import { adminFetch } from "@/lib/admin-fetch";
+
+type DealFormData = {
+  title: string;
+  type: string;
+  description: string;
+  image: string;
+  newPrice: number;
+  oldPrice: string | number;
+  active: boolean;
+};
 
 export default function NewDealPage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, setValue, watch } = useForm()
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, setValue, watch } = useForm<DealFormData>();
 
-  const watchedActive = watch("active", true)
+  const watchedActive = watch("active", true);
+  const watchedImage = watch("image", "");
 
-  async function onSubmit(data: any) {
-    setIsLoading(true)
-    const result = await createDeal({
-      ...data,
-      active: data.active !== undefined ? data.active : true,
-      newPrice: Number(data.newPrice),
-      oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
-    })
-    if (result.success) {
-      router.push("/admin/deals")
+  async function onSubmit(data: DealFormData) {
+    setIsLoading(true);
+    setError(null);
+
+    const result = await adminFetch("/deals", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        active: data.active !== undefined ? data.active : true,
+        newPrice: Number(data.newPrice),
+        oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
+      }),
+    });
+
+    setIsLoading(false);
+
+    if (result.ok) {
+      router.push("/admin/deals");
+    } else {
+      setError(result.error);
     }
-    setIsLoading(false)
   }
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Add New Deal</h1>
+
+      {error && <AdminAlert type="error" message={error} />}
+
       <Card>
         <CardHeader>
           <CardTitle>Deal Details</CardTitle>
@@ -57,7 +84,7 @@ export default function NewDealPage() {
               <Label>Type</Label>
               <Select onValueChange={(value) => setValue("type", value)}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select deal type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="LAST_MINUTE">Last Minute</SelectItem>
@@ -73,15 +100,21 @@ export default function NewDealPage() {
               <Textarea {...register("description")} rows={3} />
             </div>
 
-            <div>
-              <Label>Image URL</Label>
-              <Input {...register("image", { required: true })} />
-            </div>
+            <ImageUrlField
+              label="Image URL"
+              name="image"
+              register={register}
+              value={watchedImage}
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <Label>New Price</Label>
-                <Input type="number" step="0.01" {...register("newPrice", { required: true })} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  {...register("newPrice", { required: true })}
+                />
               </div>
               <div>
                 <Label>Old Price (optional)</Label>
@@ -93,14 +126,21 @@ export default function NewDealPage() {
               <Checkbox
                 id="active"
                 checked={watchedActive}
-                onCheckedChange={(checked) => setValue("active", checked)}
+                onCheckedChange={(checked) => setValue("active", !!checked)}
               />
               <Label htmlFor="active">Active</Label>
             </div>
 
             <div className="flex gap-4">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Deal"}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Deal"
+                )}
               </Button>
               <Button type="button" variant="ghost" onClick={() => router.back()}>
                 Cancel
@@ -110,5 +150,5 @@ export default function NewDealPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

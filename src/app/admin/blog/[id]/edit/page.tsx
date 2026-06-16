@@ -1,20 +1,5 @@
-import { prisma } from "@/lib/prisma"
-import EditBlogForm from "./EditBlogForm"
+import EditBlogForm from "./EditBlogForm";
 
-export const dynamic = "force-dynamic"
-
-interface EditBlogPageProps {
-  params: { id: string }
-}
-
-export default async function EditBlogPage({ params }: EditBlogPageProps) {
-  const post = await prisma.blogPost.findUnique({
-    where: { id: params.id },
-  })
-
-  if (!post) {
-    return <div>Post not found</div>
-  }
-
-  return <EditBlogForm post={post} />
+export default function EditBlogPage({ params }: { params: { id: string } }) {
+  return <EditBlogForm id={params.id} />;
 }

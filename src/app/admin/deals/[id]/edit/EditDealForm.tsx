@@ -1,59 +1,122 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { updateDeal } from "@/actions"
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AdminAlert } from "@/components/admin/AdminAlert";
+import { AdminFormSkeleton } from "@/components/admin/AdminSkeleton";
+import { ImageUrlField } from "@/components/admin/ImageUrlField";
+import { adminFetch } from "@/lib/admin-fetch";
 
-export default function EditDealForm({ deal }: { deal: any }) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, setValue, watch, reset } = useForm()
+type DealFormData = {
+  title: string;
+  type: string;
+  description: string;
+  image: string;
+  newPrice: number;
+  oldPrice: string | number;
+  active: boolean;
+};
+
+export default function EditDealForm({ id }: { id: string }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const { register, handleSubmit, setValue, watch, reset } =
+    useForm<DealFormData>();
+
+  const watchedActive = watch("active", true);
+  const watchedImage = watch("image", "");
 
   useEffect(() => {
-    reset({
-      title: deal.title,
-      type: deal.type,
-      description: deal.description || "",
-      image: deal.image,
-      newPrice: deal.newPrice,
-      oldPrice: deal.oldPrice || "",
-      active: deal.active,
-    })
-  }, [deal, reset])
-
-  const watchedActive = watch("active", true)
-
-  async function onSubmit(data: any) {
-    setIsLoading(true)
-    const result = await updateDeal(deal.id, {
-      ...data,
-      active: data.active !== undefined ? data.active : true,
-      newPrice: Number(data.newPrice),
-      oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
-    })
-    if (result.success) {
-      router.push("/admin/deals")
+    async function loadDeal() {
+      const result = await adminFetch<DealFormData & { id: string }>(
+        `/deals/${id}`
+      );
+      if (result.ok) {
+        const deal = result.data;
+        reset({
+          title: deal.title,
+          type: deal.type,
+          description: deal.description || "",
+          image: deal.image,
+          newPrice: deal.newPrice,
+          oldPrice: deal.oldPrice || "",
+          active: deal.active,
+        });
+      } else {
+        setError(result.error);
+      }
+      setIsFetching(false);
     }
-    setIsLoading(false)
+
+    loadDeal();
+  }, [id, reset]);
+
+  async function onSubmit(data: DealFormData) {
+    setIsLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    const result = await adminFetch(`/deals/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...data,
+        active: data.active !== undefined ? data.active : true,
+        newPrice: Number(data.newPrice),
+        oldPrice: data.oldPrice ? Number(data.oldPrice) : null,
+      }),
+    });
+
+    setIsLoading(false);
+
+    if (result.ok) {
+      setSuccess("Deal updated successfully.");
+      router.push("/admin/deals");
+    } else {
+      setError(result.error);
+    }
+  }
+
+  if (isFetching) {
+    return <AdminFormSkeleton />;
+  }
+
+  if (error && !watch("title")) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-3xl font-bold">Edit Deal</h1>
+        <AdminAlert type="error" message={error} />
+        <Button variant="ghost" onClick={() => router.push("/admin/deals")}>
+          Back to Deals
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Edit Deal</h1>
+
+      {error && <AdminAlert type="error" message={error} />}
+      {success && <AdminAlert type="success" message={success} />}
+
       <Card>
         <CardHeader>
           <CardTitle>Deal Details</CardTitle>
@@ -67,7 +130,10 @@ export default function EditDealForm({ deal }: { deal: any }) {
 
             <div>
               <Label>Type</Label>
-              <Select defaultValue={deal.type} onValueChange={(value) => setValue("type", value)}>
+              <Select
+                value={watch("type")}
+                onValueChange={(value) => setValue("type", value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -85,15 +151,21 @@ export default function EditDealForm({ deal }: { deal: any }) {
               <Textarea {...register("description")} rows={3} />
             </div>
 
-            <div>
-              <Label>Image URL</Label>
-              <Input {...register("image", { required: true })} />
-            </div>
+            <ImageUrlField
+              label="Image URL"
+              name="image"
+              register={register}
+              value={watchedImage}
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <Label>New Price</Label>
-                <Input type="number" step="0.01" {...register("newPrice", { required: true })} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  {...register("newPrice", { required: true })}
+                />
               </div>
               <div>
                 <Label>Old Price (optional)</Label>
@@ -105,16 +177,27 @@ export default function EditDealForm({ deal }: { deal: any }) {
               <Checkbox
                 id="active"
                 checked={watchedActive}
-                onCheckedChange={(checked) => setValue("active", checked)}
+                onCheckedChange={(checked) => setValue("active", !!checked)}
               />
               <Label htmlFor="active">Active</Label>
             </div>
 
             <div className="flex gap-4">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Deal"}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Deal"
+                )}
               </Button>
-              <Button type="button" variant="ghost" onClick={() => router.push("/admin/deals")}>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => router.push("/admin/deals")}
+              >
                 Cancel
               </Button>
             </div>
@@ -122,5 +205,5 @@ export default function EditDealForm({ deal }: { deal: any }) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

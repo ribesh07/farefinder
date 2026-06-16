@@ -8,8 +8,8 @@ export async function middleware(request: NextRequest) {
 
   console.log(`[Middleware] Path: ${path}, Token present: ${!!token}`)
 
-  // Only protect /admin routes
-  if (path.startsWith("/admin")) {
+  // Protect admin pages and admin API routes
+  if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
     // Allow access to login page
     if (path === "/admin/login") {
       // If already logged in, redirect to dashboard
@@ -45,5 +45,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 }

@@ -7,11 +7,12 @@ export const loginSchema = z.object({
 
 export const flightSchema = z.object({
   airline: z.string(),
+  logo: z.string().nullable().optional(),
   flightNumber: z.string(),
   fromAirport: z.string(),
   toAirport: z.string(),
-  departureTime: z.string(),
-  arrivalTime: z.string(),
+  departureTime: z.string().nullable().optional(),
+  arrivalTime: z.string().nullable().optional(),
   duration: z.string(),
   stops: z.number().int().min(0),
   cabinClass: z.string(),

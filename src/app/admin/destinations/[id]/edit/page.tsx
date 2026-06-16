@@ -1,18 +1,5 @@
-import { prisma } from "@/lib/prisma"
-import EditDestinationForm from "./EditDestinationForm"
+import EditDestinationForm from "./EditDestinationForm";
 
-export const dynamic = "force-dynamic"
-
-interface EditDestinationPageProps {
-  params: { id: string }
-}
-
-export default async function EditDestinationPage({ params }: EditDestinationPageProps) {
-  const dest = await prisma.destination.findUnique({ where: { id: params.id } })
-
-  if (!dest) {
-    return <div>Destination not found</div>
-  }
-
-  return <EditDestinationForm dest={dest} />
+export default function EditDestinationPage({ params }: { params: { id: string } }) {
+  return <EditDestinationForm id={params.id} />;
 }

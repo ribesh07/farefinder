@@ -21,11 +21,12 @@ model AdminUser {
 model Flight {
   id            String              @id @default(uuid())
   airline       String
+  logo          String?
   flightNumber  String
   fromAirport   String
   toAirport     String
-  departureTime DateTime
-  arrivalTime   DateTime
+  departureTime DateTime?
+  arrivalTime   DateTime?
   duration      String
   stops         Int                 @default(0)
   cabinClass    String              @default("Economy")
