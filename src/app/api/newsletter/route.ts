@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
     // Send welcome email
     await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'FareFinderUK <no-reply@farefinderuk.co.uk>',
+      from: "FareFinderUK <no-reply@info.farefinderuk.co.uk>",
       to: validated.email,
       subject: 'Welcome to FareFinderUK Newsletter! 🎉',
       html: `

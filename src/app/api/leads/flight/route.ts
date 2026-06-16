@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     // Send email to customer service
     await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'FareFinderUK <no-reply@farefinderuk.co.uk>',
+      from: "FareFinderUK <no-reply@info.farefinderuk.co.uk>",
       to: 'customerservice@farefinderuk.co.uk',
       subject: 'New Flight Booking Request from FareFinderUK',
       html: `
