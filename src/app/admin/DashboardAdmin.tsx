@@ -1,99 +1,73 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import AdminChart from "@/components/AdminChart";
-import { AdminDashboardSkeleton } from "@/components/admin/AdminSkeleton";
-import { AdminAlert } from "@/components/admin/AdminAlert";
-import { adminFetch } from "@/lib/admin-fetch";
-
-type DashboardStats = {
-  totalFlightLeads: number;
-  totalPackageLeads: number;
-  totalInquiries: number;
-  totalSubscribers: number;
-  totalFlights: number;
-  totalPackages: number;
-  totalBlogPosts: number;
-};
-
-const chartData = [
-  { name: "Jan", leads: 40 },
-  { name: "Feb", leads: 30 },
-  { name: "Mar", leads: 50 },
-  { name: "Apr", leads: 45 },
-  { name: "May", leads: 60 },
-  { name: "Jun", leads: 55 },
-];
+import { Button } from "@/components/ui/button";
+import { 
+  Plane, 
+  Package, 
+  MapPin, 
+  FileText, 
+  Star, 
+  Tag, 
+  Mail, 
+  Settings,
+  Users
+} from "lucide-react";
 
 export default function DashboardAdmin() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadStats() {
-      const result = await adminFetch<DashboardStats>("/dashboard");
-      if (result.ok) {
-        setStats(result.data);
-      } else {
-        setError(result.error);
-      }
-      setLoading(false);
-    }
-
-    loadStats();
-  }, []);
-
-  if (loading) {
-    return <AdminDashboardSkeleton />;
-  }
-
-  if (error || !stats) {
-    return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Dashboard Overview</h1>
-        <AdminAlert type="error" message={error ?? "Failed to load dashboard"} />
-      </div>
-    );
-  }
-
-  const cards = [
-    { label: "Flight Leads", value: stats.totalFlightLeads },
-    { label: "Package Leads", value: stats.totalPackageLeads },
-    { label: "Inquiries", value: stats.totalInquiries },
-    { label: "Subscribers", value: stats.totalSubscribers },
-    { label: "Total Flights", value: stats.totalFlights },
-    { label: "Total Packages", value: stats.totalPackages },
-    { label: "Blog Posts", value: stats.totalBlogPosts },
+  const quickActions = [
+    { label: "Manage Flights", href: "/admin/flights", icon: <Plane className="w-5 h-5" />, color: "text-blue-600 bg-blue-50" },
+    { label: "Manage Packages", href: "/admin/packages", icon: <Package className="w-5 h-5" />, color: "text-green-600 bg-green-50" },
+    { label: "Destinations", href: "/admin/destinations", icon: <MapPin className="w-5 h-5" />, color: "text-purple-600 bg-purple-50" },
+    { label: "Blog Posts", href: "/admin/blog", icon: <FileText className="w-5 h-5" />, color: "text-orange-600 bg-orange-50" },
+    { label: "Testimonials", href: "/admin/testimonials", icon: <Star className="w-5 h-5" />, color: "text-yellow-600 bg-yellow-50" },
+    { label: "Deals", href: "/admin/deals", icon: <Tag className="w-5 h-5" />, color: "text-pink-600 bg-pink-50" },
+    { label: "Leads", href: "/admin/leads", icon: <Users className="w-5 h-5" />, color: "text-indigo-600 bg-indigo-50" },
+    { label: "Inquiries", href: "/admin/inquiries", icon: <Mail className="w-5 h-5" />, color: "text-cyan-600 bg-cyan-50" },
   ];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard Overview</h1>
+    <div className="space-y-8">
+      {/* Hero/Banner Section */}
+      <section className="relative bg-gradient-to-br from-primary via-blue-700 to-blue-900 text-white rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 opacity-60">
+          <img
+            src="/cover.png"
+            alt="Admin Dashboard Banner"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6 py-16 md:py-20">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to FareFinderUK Admin</h1>
+              <p className="text-xl opacity-90">Manage your travel business from one place</p>
+            </div>
+            <Link href="/admin/settings">
+              <Button className="bg-white text-primary hover:bg-gray-100">
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card) => (
-          <Card key={card.label}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">{card.label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Leads by Month</CardTitle>
-          </CardHeader>
-          <CardContent className="h-80">
-            <AdminChart chartData={chartData} />
-          </CardContent>
-        </Card>
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {quickActions.map((action) => (
+            <Link href={action.href} key={action.label}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="flex items-center gap-4 p-6">
+                  <div className={`p-3 rounded-lg ${action.color}`}>
+                    {action.icon}
+                  </div>
+                  <span className="font-medium">{action.label}</span>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
