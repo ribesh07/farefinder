@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 interface FlightCardProps {
   id: string;
   airline: string;
+  logo : string ;
   flightNumber: string;
   fromAirport: string;
   toAirport: string;
@@ -17,6 +18,7 @@ interface FlightCardProps {
 
 export default function FlightCard({
   airline,
+  logo,
   flightNumber,
   fromAirport,
   toAirport,
@@ -39,7 +41,8 @@ export default function FlightCard({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-              <p className="text-lg font-bold text-primary">{airline.charAt(0)}</p>
+              {/* <p className="text-lg font-bold text-primary">{airline.charAt(0)}</p> */}
+              <img src={logo} alt={`${airline} logo`} className="h-full w-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
             </div>
             <div>
               <p className="font-semibold">{airline}</p>
@@ -49,14 +52,14 @@ export default function FlightCard({
 
           <div className="flex items-center justify-between flex-1 max-w-lg">
             <div className="text-center">
-              <p className="text-2xl font-bold">{formatTime(departureTime)}</p>
+              {/* <p className="text-2xl font-bold">{formatTime(departureTime)}</p> */}
               <p className="text-sm text-gray-500">{fromAirport}</p>
             </div>
             <div className="flex-1 mx-4">
               <div className="flex items-center">
                 <div className="flex-1 h-px bg-gray-300"></div>
                 <div className="mx-2">
-                  <p className="text-xs text-gray-500 text-center">{duration}</p>
+                  {/* <p className="text-xs text-gray-500 text-center">{duration}</p> */}
                   <Badge variant={stops === 0 ? 'default' : 'secondary'} className="mt-1">
                     {stops === 0 ? 'Non-stop' : `${stops} stop${stops > 1 ? 's' : ''}`}
                   </Badge>
@@ -65,7 +68,7 @@ export default function FlightCard({
               </div>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">{formatTime(arrivalTime)}</p>
+              {/* <p className="text-2xl font-bold">{formatTime(arrivalTime)}</p> */}
               <p className="text-sm text-gray-500">{toAirport}</p>
             </div>
           </div>

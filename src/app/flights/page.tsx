@@ -11,6 +11,7 @@ import { Filter } from 'lucide-react';
 interface Flight {
   id: string;
   airline: string;
+  logo : string ;
   flightNumber: string;
   fromAirport: string;
   toAirport: string;
