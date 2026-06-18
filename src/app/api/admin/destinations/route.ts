@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 import { destinationSchema } from "@/types";
 
+export const dynamic = "force-dynamic";
 export async function GET() {
   const { error } = await requireAdmin();
   if (error) return error;

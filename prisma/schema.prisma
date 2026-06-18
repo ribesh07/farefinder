@@ -214,6 +214,17 @@ model WebsiteSettings {
   updatedAt      DateTime @updatedAt
 }
 
+model Airport {
+  id       String @id
+  iata_code     String @unique
+   name String?
+  municipality String?
+  iso_country String?
+
+  @@index([iata_code])
+  @@index([municipality])
+}
+
 enum Role {
   SUPER_ADMIN
   ADMIN

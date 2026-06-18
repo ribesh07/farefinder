@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import { Plane, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Plane, Facebook, Instagram,  Mail, Phone, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { FaTiktok } from "react-icons/fa";
+
 
 export default function Footer() {
   return (
@@ -17,17 +19,17 @@ export default function Footer() {
               Your trusted travel partner for finding the best flights, holidays, and deals from the UK.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://www.facebook.com/share/185YCFXTgZ" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              {/* <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </a> */}
+              <a href="https://www.instagram.com/fare.finderuk" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin className="h-5 w-5" />
+                <FaTiktok className="h-6 w-6 text-white hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
@@ -63,12 +65,16 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2 text-gray-400">
                 <Phone className="h-4 w-4" />
-                <span>44 7415 026444</span>
+                <span>+44 7415 026444</span>
               </li>
               <li className="flex items-center space-x-2 text-gray-400">
-                <Mail className="h-4 w-4" />
-                <span>customerservice@farefinderuk.co.uk</span>
-                
+               <Mail className="h-4 w-4 text-gray-400 shrink-0" />
+                <a
+                  href="mailto:customerservice@farefinderuk.co.uk?subject=Travel Inquiry"
+                  className="hover:text-white transition-colors"
+                >
+                  customerservice@farefinderuk.co.uk
+                </a>
               </li>
             </ul>
             <div>
