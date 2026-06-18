@@ -9,12 +9,12 @@ import FlightBookingModal from './FlightBookingModal';
 interface FlightCardProps {
   id: string;
   airline: string;
-  logo : string ;
+  logo?: string;
   flightNumber: string;
   fromAirport: string;
   toAirport: string;
-  departureTime: Date;
-  arrivalTime: Date;
+  departureTime: string;
+  arrivalTime: string;
   duration: string;
   stops: number;
   farePrice: number;
@@ -35,8 +35,8 @@ export default function FlightCard({
 }: FlightCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleTimeString('en-GB', {
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -49,7 +49,18 @@ export default function FlightCard({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center space-x-4">
               <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                <img src={logo} alt={`${airline} logo`} className="h-full w-full object-contain" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                {logo ? (
+                  <img 
+                    src={logo} 
+                    alt={`${airline} logo`} 
+                    className="h-full w-full object-contain" 
+                    onError={(e) => (e.currentTarget.style.display = 'none')} 
+                  />
+                ) : (
+                  <div className="text-2xl font-bold text-gray-400">
+                    {airline.charAt(0)}
+                  </div>
+                )}
               </div>
               <div>
                 <p className="font-semibold">{airline}</p>

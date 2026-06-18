@@ -7,20 +7,26 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Filter, PlaneTakeoff, PlaneLanding, Calendar, Users } from 'lucide-react';
+import { Filter, PlaneTakeoff, PlaneLanding, Calendar, Users, MessageSquare, Search } from 'lucide-react';
 
 interface Flight {
   id: string;
+  active: boolean;
   airline: string;
-  logo : string ;
+  logo?: string;
   flightNumber: string;
   fromAirport: string;
   toAirport: string;
-  departureTime: Date;
-  arrivalTime: Date;
+  departureTime: string;
+  arrivalTime: string;
   duration: string;
   stops: number;
   farePrice: number;
+  featured?: boolean;
+  cabinClass?: string;
+  baggageInfo?: string | null;
+  oldPrice?: number | null;
+  createdAt: string;
 }
 
 export default function FlightsClient() {
@@ -53,7 +59,16 @@ export default function FlightsClient() {
 
   const airlines = Array.from(new Set(flights.map(f => f.airline)));
 
-  const filteredFlights = flights.filter(flight => {
+  // First filter based on search query params (from/to airports)
+  const searchFilteredFlights = flights.filter(flight => {
+    const matchesFrom = !from || flight.fromAirport.toUpperCase() === from.toUpperCase();
+    const matchesTo = !to || flight.toAirport.toUpperCase() === to.toUpperCase();
+    const isActive = flight.active;
+    return matchesFrom && matchesTo && isActive;
+  });
+
+  // Then apply additional filters (airlines, price, stops)
+  const filteredFlights = searchFilteredFlights.filter(flight => {
     const airlineMatch = selectedAirlines.length === 0 || selectedAirlines.includes(flight.airline);
     const priceMatch = flight.farePrice >= priceRange[0] && flight.farePrice <= priceRange[1];
     const stopsMatch = stops.length === 0 || 
@@ -75,13 +90,32 @@ export default function FlightsClient() {
     );
   };
 
+  const generateWhatsAppLink = () => {
+    const message = `
+    Hello FareFinderUK! I'm interested in this flight:
+
+    Flight Details:
+    - From: ${fromName} (${from})
+    - To: ${toName} (${to})
+    - Departure: ${departure}
+    - Passengers: ${passengers}
+    - Please get back to me with more info!
+    `.trim();
+
+    const whatsappNumber = '447415026444';
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  };
+
+
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Search Results</h1>
           {/* Later on work on it flight filters */}
-          {/* {(from || to || departure || passengers) && (
+          {(from || to || departure || passengers) && (
             <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6">
               <div className="flex flex-wrap gap-4 items-center justify-between">
                 <div className="flex flex-wrap gap-6">
@@ -134,8 +168,13 @@ export default function FlightsClient() {
                 </div>
               </div>
             </div>
-          )} */}
-          <p className="text-gray-600 dark:text-gray-300 mt-4">{filteredFlights.length} flights found</p>
+          )}
+          <p className="text-gray-600 dark:text-gray-300 mt-4">
+            {searchFilteredFlights.length === 0 && (from || to) 
+              ? "No flights available" 
+              : `${filteredFlights.length} flights found`
+            }
+          </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -221,13 +260,45 @@ export default function FlightsClient() {
 
           {/* Flight Results */}
           <div className="flex-1 space-y-4">
-            {filteredFlights.map((flight) => (
-              <FlightCard key={flight.id} {...flight} />
-            ))}
-            {filteredFlights.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-xl text-gray-500">No flights found matching your filters</p>
+            {searchFilteredFlights.length === 0 && (from || to) ? (
+              // No flights match the search criteria (from/to)
+              <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <Search className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-6" />
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                  No Flights Available
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                  We couldn't find any flights for your selected route. But don't worry, our team can help you find the perfect flight!
+                </p>
+                <div
+                  className="flex items-center justify-center"
+                >
+
+                <a
+                   href={generateWhatsAppLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <MessageSquare className="h-5 w-5" />
+                  Chat Now
+                </a>
+                </div>
               </div>
+            ) : (
+              // Flights match the search criteria - show results with filters
+              <>
+                {filteredFlights.map((flight) => (
+                  <FlightCard key={flight.id} {...flight} />
+                ))}
+                {filteredFlights.length === 0 && searchFilteredFlights.length > 0 && (
+                  <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
+                    <p className="text-xl text-gray-500 dark:text-gray-400">
+                      No flights match your additional filters. Try adjusting your filter settings!
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
