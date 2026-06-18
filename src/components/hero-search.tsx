@@ -7,26 +7,51 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { airports } from '@/data/airports';
+import AirportInput from './airport-input';
+
+interface Airport {
+  id: string;
+  code: string;
+  name: string;
+  city: string;
+  country: string;
+}
 
 export default function HeroSearch() {
   const router = useRouter();
-  const [from, setFrom] = useState('LHR');
-  const [to, setTo] = useState('MAN');
+  const [fromAirport, setFromAirport] = useState<Airport | null>(null);
+  const [toAirport, setToAirport] = useState<Airport | null>(null);
   const [departure, setDeparture] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState('1');
   const [cabin, setCabin] = useState('economy');
 
   const handleSwap = () => {
-    const temp = from;
-    setFrom(to);
-    setTo(temp);
+    const temp = fromAirport;
+    setFromAirport(toAirport);
+    setToAirport(temp);
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/flights');
+    
+    const params = new URLSearchParams();
+    if (fromAirport) {
+      params.set('from', fromAirport.code);
+      params.set('fromName', fromAirport.name);
+      params.set('fromCity', fromAirport.city);
+    }
+    if (toAirport) {
+      params.set('to', toAirport.code);
+      params.set('toName', toAirport.name);
+      params.set('toCity', toAirport.city);
+    }
+    if (departure) params.set('departure', departure);
+    if (returnDate) params.set('return', returnDate);
+    params.set('passengers', passengers);
+    params.set('cabin', cabin);
+    
+    router.push(`/flights?${params.toString()}`);
   };
 
   return (
@@ -34,24 +59,15 @@ export default function HeroSearch() {
       <form onSubmit={handleSearch} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
           <div className="lg:col-span-2">
-            <Label htmlFor="from" className='text-primary'>
+            <Label htmlFor="from" className='text-primary mb-2 block'>
               From
             </Label>
-            <div className="relative">
-              <PlaneTakeoff className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
-              <Select value={from} onValueChange={setFrom} >
-                <SelectTrigger id="from" className="pl-10 text-primary">
-                  <SelectValue placeholder="From" className='text-primary' />
-                </SelectTrigger>
-                <SelectContent>
-                  {airports.map((airport) => (
-                    <SelectItem key={airport.code} value={airport.code} className='text-primary'>
-                      {airport.name} ({airport.code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <AirportInput
+              placeholder="From where?"
+              value={fromAirport}
+              onChange={setFromAirport}
+              icon={PlaneTakeoff}
+            />
           </div>
 
           <div className="flex justify-center lg:col-span-1 text-primary">
@@ -61,22 +77,13 @@ export default function HeroSearch() {
           </div>
 
           <div className="lg:col-span-2">
-            <Label htmlFor="to" className='text-primary'>To</Label>
-            <div className="relative">
-              <PlaneLanding className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
-              <Select value={to} onValueChange={setTo}>
-                <SelectTrigger id="to" className="pl-10 text-primary">
-                  <SelectValue placeholder="To" className='text-primary' />
-                </SelectTrigger>
-                <SelectContent>
-                  {airports.map((airport) => (
-                    <SelectItem key={airport.code} value={airport.code} className='text-primary'>
-                      {airport.name} ({airport.code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Label htmlFor="to" className='text-primary mb-2 block'>To</Label>
+            <AirportInput
+              placeholder="To where?"
+              value={toAirport}
+              onChange={setToAirport}
+              icon={PlaneLanding}
+            />
           </div>
         </div>
 
