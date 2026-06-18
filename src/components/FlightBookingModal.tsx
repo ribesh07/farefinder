@@ -109,13 +109,12 @@ ${submittedFormData.whatsapp ? `- WhatsApp: ${submittedFormData.whatsapp}` : ''}
 - Children: ${submittedFormData.children}
 - Departure Date: ${submittedFormData.departureDate}
 ${submittedFormData.returnDate ? `- Return Date: ${submittedFormData.returnDate}` : ''}
-${submittedFormData.notes ? `\n📝 Notes: ${submittedFormData.notes}` : ''}
+${submittedFormData.notes ? `\n Notes: ${submittedFormData.notes}` : ''}
 
 Please get back to me with more info!
     `.trim();
 
-    // Replace YOUR_WHATSAPP_NUMBER with your actual WhatsApp number (e.g., '447123456789')
-    const whatsappNumber = '447599064917'; // Update this with your actual number!
+    const whatsappNumber = '447415026444'; // Update this 
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
   };

@@ -98,9 +98,9 @@ async function main() {
       id: 'default',
       companyName: 'FareFinderUK',
       supportEmail: 'customerservice@farefinderuk.co.uk',
-      supportPhone: '+44 7599 064917',
-      whatsappNumber: '+44 7599 064917',
-      officeAddress: 'Glassgow, UK'
+      supportPhone: '+44 7415 026444',
+      whatsappNumber: '+44 7415 026444',
+      officeAddress: 'Glasgow, UK'
     }
   })
 

@@ -111,7 +111,8 @@ export async function POST(request: Request) {
               <div style="margin-top:30px;padding-top:20px;border-top:1px solid #eee;">
                 <p><strong>FareFinderUK</strong></p>
                 <p>Email: customerservice@farefinderuk.co.uk</p>
-                <p>Phone: +44 7599 064917</p>
+                <p>Phone: +44 7415 026444</p>
+                <p>WhatsApp: +44 7415 026444</p>
               </div>
             </div>
           `,

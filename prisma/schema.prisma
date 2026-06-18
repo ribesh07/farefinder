@@ -200,13 +200,13 @@ model WebsiteSettings {
   id             String   @id @default(uuid())
   companyName    String   @default("FareFinderUK")
   supportEmail   String   @default("support@farefinderuk.com")
-  supportPhone   String   @default("447599064917")
-  whatsappNumber String   @default("447599064917")
+  supportPhone   String   @default("447415026444")
+  whatsappNumber String   @default("447415026444")
   facebook       String?
   instagram      String?
   twitter        String?
   linkedin       String?
-  officeAddress  String   @default("Glassgow, UK")
+  officeAddress  String   @default("Glasgow, UK")
   smtpHost       String?
   smtpPort       Int?
   smtpUser       String?

@@ -92,12 +92,12 @@ Customer Details:
 - Phone: ${submittedFormData.phone}
 ${submittedFormData.whatsapp ? `- WhatsApp: ${submittedFormData.whatsapp}` : ''}
 - Travelers: ${submittedFormData.travelers}
-${submittedFormData.notes ? `\n📝 Notes: ${submittedFormData.notes}` : ''}
+${submittedFormData.notes ? `\n Notes: ${submittedFormData.notes}` : ''}
 
 Please get back to me with more info!
     `.trim();
 
-    const whatsappNumber = '447599064917';
+    const whatsappNumber = '447415026444';
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
   };
